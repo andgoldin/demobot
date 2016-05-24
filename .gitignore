@@ -1,0 +1,6 @@
+.venv/
+**/*.pyc
+log
+*.sqlite3
+nohup.out
+slacktoken

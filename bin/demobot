@@ -1,0 +1,125 @@
+#!/bin/bash
+
+echo "
+     ;    
+    [\"]    
+   /[_]\  
+    ] [   demobot
+"
+
+BOT_DIR="/home/agoldin/demobot"
+BOT_DB="/home/agoldin/demobot/demobot_db.sqlite3"
+BOT_LOG_DIR=$BOT_DIR/log
+BOT_PLUGIN_DIR=$BOT_DIR/src/plugins
+BOT_START=$BOT_DIR/bin/limbo
+
+RETVAL=0
+
+ #stop the current processes
+stop() {
+    get_pids
+
+    if [[ -n $PID_OF_BOT_START ]]; then
+        echo "Stopping limbo (pid $PID_OF_BOT_START)..."
+        execute "kill -9 $PID_OF_BOT_START"
+    fi
+}
+
+ #get the status
+status() {
+    get_pids
+
+    if [[ -n $PID_OF_BOT_START ]]; then
+        echo "limbo (pid $PID_OF_BOT_START) is running..."
+    fi
+    if [[ -z $PID_OF_BOT_START ]]; then
+        echo "Nothing is running now"
+    fi
+}
+
+# update the branch
+update() {
+    cd $BOT_DIR
+
+    # change the file owner to the current user
+    execute "sudo chown -R $(whoami) ."
+
+    # update the branch
+    execute "git pull --ff-only origin HEAD"
+    execute "git submodule update --init --recursive --force"
+
+    # change the owner to root
+    execute "sudo chown -R root ."
+}
+
+# start processes
+start() {
+    get_pids
+
+    if [[ -n $PID_OF_BOT_START ]]; then
+        echo "limbo (pid $PID_OF_BOT_START) is already running..."
+    else
+        # check that virualenv is active
+        if [ ! -n "$VIRTUAL_ENV" ]; then
+            # if not active, check that virtualenv exists in directory
+            if [ ! -n "$BOT_DIR/.venv/bin/activate" ]; then
+                echo "virtualenv not set up, please run bin/setup"
+                exit 1
+            fi
+            # activate virtualenv
+            source $BOT_DIR/.venv/bin/activate
+        fi
+        # TODO: move this into a config file
+        export SLACK_TOKEN=$(cat $BOT_DIR/slacktoken)
+        export LIMBO_LOGFILE=$BOT_LOG_DIR/bot_log.info
+        export LIMBO_DB=$BOT_DB
+        execute "nohup $BOT_START -pp $BOT_PLUGIN_DIR -d $BOT_DB &>/dev/null &"
+    fi
+}
+
+# execute a command, exit if the command fails
+execute() {
+    if [[ $# -eq 0 ]]; then
+        return
+    fi
+    cmd="$*"
+    echo "$cmd"
+    eval $cmd
+    RETVAL=$?
+    if [[ ! $RETVAL -eq 0 ]]; then
+        exit $RETVAL
+    fi
+}
+
+# get process ids of components 
+get_pids() {
+    PID_OF_BOT_START=$(ps ax | grep $BOT_START | grep -v grep | sed 's/^ *//' | cut -d' ' -f1 | xargs)
+}
+
+# how the script is called
+case "$1" in
+    start)
+        start
+        status
+        ;;
+    stop)
+        stop
+        status
+        ;;
+    status)
+        status
+        ;;
+    restart)
+        stop
+        start
+        status
+        ;;
+    update)
+        update
+        ;;
+    *)
+        echo "Usage: demobot {start|stop|status|restart|update}"
+        ;;
+esac
+
+exit $RETVAL

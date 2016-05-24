@@ -1,0 +1,17 @@
+#!/bin/bash
+
+DIR=$( cd "$(dirname "$0")/.." ; pwd -P )
+
+# check that virualenv is active
+if [ ! -n "$VIRTUAL_ENV" ]; then
+	# if not active, check that virtualenv exists in directory
+	if [ ! -n "$DIR/.venv/bin/activate" ]; then
+		echo "virtualenv not set up, please run bin/setup"
+		exit 1
+	fi
+	# activate virtualenv
+	source $DIR/.venv/bin/activate
+fi
+
+# set pythonpath and run the CLI
+$DIR/bin/limbo -t -pp $DIR/src/plugins

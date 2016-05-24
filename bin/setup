@@ -1,0 +1,23 @@
+#!/bin/bash
+
+DIR=$( cd "$(dirname "$0")/.." ; pwd -P )
+
+# check that virtualenv is installed
+if ! which virtualenv &> /dev/null; then
+        echo "Python dependency virtualenv not installed"
+        exit 1
+fi
+
+# check that venv has been run
+if [ ! -d "$DIR/.venv/bin" ]; then
+        cd $DIR && virtualenv .venv
+        if [ $? -ne 0 ]; then
+                exit 1
+        fi
+fi
+
+# activate virtual env and install requirements
+source .venv/bin/activate && pip install -r venv_requirements.txt
+if [ $? -ne 0 ]; then
+        exit $?
+fi

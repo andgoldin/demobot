@@ -1,0 +1,6 @@
+limbo==3.8.0
+requests==2.5.3
+phonenumbers
+ipdb
+mock==1.0.1
+nose
