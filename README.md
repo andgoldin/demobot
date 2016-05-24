@@ -10,6 +10,7 @@ Demonstraction Slack bot for AppNexus learn &amp; teach
 * Add a Python file to the `/src/plugins` directory
 * Include a help string on the first line: `"""!command [<argument>] description"""`
 * Include an `on_message` function that returns a string. This string will be the bot's reply for the command:
+
     ```
     on_message(msg, server):
         # some code
