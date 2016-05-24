@@ -9,7 +9,14 @@ Demonstraction Slack bot for AppNexus learn &amp; teach
 ## Writing a plugin
 * Add a Python file to the `/src/plugins` directory
 * Include a help string on the first line: `"""!command [<argument>] description"""`
-* Tnclude a function `on_message(msg, server):` that returns a string. This string will be the bot's reply for the command
+* Include an `on_message` function that returns a string. This string will be the bot's reply for the command:
+    ```
+    on_message(msg, server):
+        # some code
+        # parse command input, make api calls, call helper functions, etc
+        # create a response string
+        return response
+    ```
 
 ## Testing locally
 Simply run in test mode in your command line: `./bin/test`. This will let you test your command before you need to commit or push any code.
