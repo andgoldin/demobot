@@ -6,6 +6,27 @@ Demonstraction Slack bot for AppNexus learn &amp; teach
 * Install virtualenv: `pip install virtualenv`
 * `cd` into repository and run `./bin/setup`. This will set up your virtual environment with all of the dependencies we need to get started.
 
+## Working with git
+First make sure you are up to date with master:
+* `git checkout master`
+* `git pull`
+
+Check out a new branch:
+* `git checkout -b MyBranch`
+
+Commit and push your changes:
+* `git status` to see what files have been added changed
+* `git add filename.py`
+* `git status` to make sure your file has been staged for commit
+* `git commit -m "commit message"
+* `git push origin MyBranch`
+
+Merge branch into master when changes are ready:
+* `git checkout master`
+* `git pull`
+* `git merge origin/MyBranch`
+* `git push origin master`
+
 ## Writing a plugin
 * Add a Python file to the `/src/plugins` directory
 * Include a help string on the first line: `"""!command [<argument>] description"""`
@@ -20,7 +41,10 @@ Demonstraction Slack bot for AppNexus learn &amp; teach
     ```
 
 ## Testing locally
-Simply run in test mode in your command line: `./bin/test`. This will let you test your command before you need to commit or push any code.
+Simply run the bot in test mode on your command line:
+* `./bin/test`
+
+This will let you test your command before you need to commit or push any code.
 
 ## Useful stuff
 You can get user and message information from the `msg` and `server` objects in your `on_message` function:
