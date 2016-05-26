@@ -1,7 +1,9 @@
 """!hello says hello"""
 
+from utils.formatting import at
+
 def hello(name):
-    return "Hello, " + name + "!"
+    return "Hello, " + at(name) + "!"
 
 def on_message(msg, server):
     text = msg["text"]

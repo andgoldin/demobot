@@ -16,13 +16,13 @@ def italics(text):
     """ Formats the given text as italicized """
     return "_" + text + "_"
 
+def quote(text):
+    """ Places the given text in a quote """
+    return ">" + text
+
 def blockquote(text):
     """ Places the given text in a block quote """
     return ">>>" + text
-
-def link(url, text):
-    """ Formats the given text into a clickable link given the url """
-    return "<" + url + "|" + text + ">"
 
 def at(user, text=None):
     """ Prefixes the given text with an @ mention of the given user """
