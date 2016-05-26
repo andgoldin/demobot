@@ -18,7 +18,7 @@ Commit and push your changes:
 * `git status` to see what files have been added changed
 * `git add filename.py`
 * `git status` to make sure your file has been staged for commit
-* `git commit -m "commit message"
+* `git commit -m "commit message"`
 * `git push origin MyBranch`
 
 Merge branch into master when changes are ready:
